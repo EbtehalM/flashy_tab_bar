@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
+
 class FlashyTabBar extends StatelessWidget {
   final int selectedIndex;
   final double height;
@@ -10,7 +11,6 @@ class FlashyTabBar extends StatelessWidget {
   final bool showElevation;
   final Duration animationDuration;
   final Curve animationCurve;
-  final List<BoxShadow> shadows;
 
   final List<FlashyTabBarItem> items;
   final ValueChanged<int> onItemSelected;
@@ -24,12 +24,6 @@ class FlashyTabBar extends StatelessWidget {
     this.backgroundColor,
     this.animationDuration = const Duration(milliseconds: 170),
     this.animationCurve = Curves.linear,
-    this.shadows = const [
-      const BoxShadow(
-        color: Colors.black12,
-        blurRadius: 3,
-      ),
-    ],
     @required this.items,
     @required this.onItemSelected,
   }) {
@@ -49,7 +43,12 @@ class FlashyTabBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: bg,
         boxShadow: showElevation
-            ? shadows
+            ? [
+          const BoxShadow(
+            color: Colors.black12,
+            blurRadius: 3,
+          ),
+        ]
             : [],
       ),
       child: SafeArea(
@@ -58,21 +57,20 @@ class FlashyTabBar extends StatelessWidget {
           height: this.height,
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: items.map((item) {
               var index = items.indexOf(item);
-              return Expanded(
-                child: GestureDetector(
-                  onTap: () => onItemSelected(index),
-                  child: _FlashTabBarItem(
-                    item: item,
-                    tabBarHeight: this.height,
-                    iconSize: iconSize,
-                    isSelected: index == selectedIndex,
-                    backgroundColor: bg,
-                    animationDuration: animationDuration,
-                    animationCurve: animationCurve,
-                  ),
+              return GestureDetector(
+                onTap: () => onItemSelected(index),
+                child: _FlashTabBarItem(
+                  item: item,
+                  tabBarHeight: this.height,
+                  iconSize: iconSize,
+                  isSelected: index == selectedIndex,
+                  backgroundColor: bg,
+                  animationDuration: animationDuration,
+                  animationCurve: animationCurve,
                 ),
               );
             }).toList(),
@@ -84,19 +82,23 @@ class FlashyTabBar extends StatelessWidget {
 }
 
 class FlashyTabBarItem {
-  final Icon icon;
+//  final Icon icon;
   final Text title;
 
+  Icon icon;
+  ImageIcon imageIcon;
   Color activeColor;
   Color inactiveColor;
 
   FlashyTabBarItem({
-    @required this.icon,
+//    @required this.icon,
     @required this.title,
+    this.icon,
+    this.imageIcon,
     this.activeColor = const Color(0xff272e81),
     this.inactiveColor = const Color(0xff9496c1),
   }) {
-    assert(icon != null);
+//    assert(icon != null);
     assert(title != null);
   }
 }
@@ -114,13 +116,13 @@ class _FlashTabBarItem extends StatelessWidget {
 
   const _FlashTabBarItem(
       {Key key,
-      @required this.item,
-      @required this.isSelected,
-      @required this.tabBarHeight,
-      @required this.backgroundColor,
-      @required this.animationDuration,
-      @required this.animationCurve,
-      @required this.iconSize})
+        @required this.item,
+        @required this.isSelected,
+        @required this.tabBarHeight,
+        @required this.backgroundColor,
+        @required this.animationDuration,
+        @required this.animationCurve,
+        @required this.iconSize})
       : assert(isSelected != null),
         assert(item != null),
         assert(backgroundColor != null),
@@ -134,8 +136,9 @@ class _FlashTabBarItem extends StatelessWidget {
     return Container(
         color: backgroundColor,
         height: double.maxFinite,
+        width: 120,
         child: Stack(
-          overflow: Overflow.clip,
+          //overflow: Overflow.clip,
           alignment: Alignment.center,
           children: <Widget>[
             AnimatedAlign(
@@ -149,9 +152,9 @@ class _FlashTabBarItem extends StatelessWidget {
                         color: isSelected
                             ? item.activeColor.withOpacity(1)
                             : item.inactiveColor == null
-                                ? item.activeColor
-                                : item.inactiveColor),
-                    child: item.icon,
+                            ? item.activeColor
+                            : item.inactiveColor),
+                    child: item.imageIcon != null ? item.imageIcon: item.icon,
                   )),
               alignment: isSelected ? Alignment.topCenter : Alignment.center,
             ),
@@ -178,7 +181,7 @@ class _FlashTabBarItem extends StatelessWidget {
             ),
             AnimatedAlign(
                 alignment:
-                    isSelected ? Alignment.center : Alignment.bottomCenter,
+                isSelected ? Alignment.center : Alignment.bottomCenter,
                 duration: animationDuration,
                 curve: animationCurve,
                 child: AnimatedOpacity(
@@ -196,7 +199,8 @@ class _FlashTabBarItem extends StatelessWidget {
                 child: CustomPaint(
                   child: Container(
                     width: 80,
-                    height: iconSize,
+//                    height: iconSize,
+                    height: iconSize-5,
                   ),
                   painter: _CustomPath(backgroundColor),
                 )),
