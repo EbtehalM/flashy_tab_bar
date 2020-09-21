@@ -58,10 +58,12 @@ class FlashyTabBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
           child: Row(
 //            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: items.map((item) {
               var index = items.indexOf(item);
-              return GestureDetector(
+              return Expanded(
+                child: GestureDetector(
                 onTap: () => onItemSelected(index),
                 child: _FlashTabBarItem(
                   item: item,
@@ -71,6 +73,7 @@ class FlashyTabBar extends StatelessWidget {
                   backgroundColor: bg,
                   animationDuration: animationDuration,
                   animationCurve: animationCurve,
+                ),
                 ),
               );
             }).toList(),
