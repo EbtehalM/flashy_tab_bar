@@ -58,8 +58,8 @@ class FlashyTabBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 20),
           child: Row(
 //            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisAlignment: MainAxisAlignment.center,
+             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+           // mainAxisAlignment: MainAxisAlignment.center,
             children: items.map((item) {
               var index = items.indexOf(item);
               return Expanded(
